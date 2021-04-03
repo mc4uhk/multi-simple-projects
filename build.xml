@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="root-project" default="help" basedir=".">
+	<property name="dist" value="dist"/>
+	<property name="tar-file" value="full-dist.tar"/>
+
+	<target name="help" description="help">
+		<echo>
+root build.xml
+clean     -- clean root project files
+clean-all -- clean root project and all sub-projects
+dist-all  -- create dist(s) for all sub-projects
+tar       -- create a full distributable tar file
+
+Run with CAUTION!!
+purge-all -- clean root project and all sub-projects and remove all dependency libs
+copy-mvn-lib-all -- download and copy all maven dependency libs to libs/
+		</echo>
+	</target>
+
+	<target name="clean">
+		<delete dir="${dist}"/>
+		<delete file="${tar-file}"/>
+	</target>
+	
+	<target name="dist-all" depends="clean-all">
+		<mkdir dir="${dist}"/>
+		<subant target="dist">
+		    <fileset dir="." includes="*/build.xml"/>
+		</subant>
+		
+		<copy todir="${dist}">
+		  <fileset dir=".">
+		    <include name="**/dist/**"/>
+		  </fileset>
+		  <regexpmapper from="^(.*)/dist/(.*)$$" to="\2"/>
+		</copy>
+	</target>
+
+	<target name="clean-all" depends="clean">
+		<subant target="clean">
+		    <fileset dir="." includes="*/build.xml"/>
+		</subant>
+	</target>
+
+	<target name="purge-all" depends="clean-all">
+		<subant target="clean-lib">
+		    <fileset dir="." includes="*/build.xml"/>
+		</subant>
+	</target>
+
+	<target name="copy-mvn-lib-all">
+		<subant target="copy-mvn-lib">
+		    <fileset dir="." includes="*/build.xml"/>
+		</subant>
+	</target>
+
+	<target name="tar" depends="dist-all">
+		<tar destfile="${tar-file}" basedir="${dist}"/>
+	</target>
+
+</project>

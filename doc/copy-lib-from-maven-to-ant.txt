@@ -1,0 +1,5 @@
+
+#Copy managed libs from Maven to ant lib
+
+mvn install dependency:copy-dependencies 
+cp target/dependency/* lib/

@@ -1,0 +1,5 @@
+To create bin/ files and replace in-file params. Can refer to :
+https://ant.apache.org/manual/Tasks/replaceregexp.html
+
+could be useful to create script file like "bin/start-simple-proj-xxx.sh" and adjust project specific params inside.
+
